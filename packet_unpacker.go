@@ -139,6 +139,11 @@ func (u *packetUnpacker) parseIETFFrame(r *bytes.Reader, typeByte byte, hdr *wir
 		if err != nil {
 			err = qerr.Error(qerr.InvalidAckData, err.Error())
 		}
+	case 0x42:
+		frame, err = wire.ParseHandshakeDoneFrame(r, u.version)
+		if err != nil {
+			err = qerr.Error(qerr.InvalidFrameData, err.Error())
+		}
 	default:
 		err = qerr.Error(qerr.InvalidFrameData, fmt.Sprintf("unknown type byte 0x%x", typeByte))
 	}
